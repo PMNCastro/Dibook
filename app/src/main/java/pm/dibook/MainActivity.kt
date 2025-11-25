@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         requestQueue = Volley.newRequestQueue(this)
 
-        // Verificar se há login dado
+        // Verificar se há login guardado
         verificarLoginGuardado()
 
         // Botão de Login novo
