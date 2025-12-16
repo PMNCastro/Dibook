@@ -20,7 +20,7 @@ class PesquisarFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: LivroAdapter
     private val livrosList = ArrayList<Livro>()
-    private val livrosListFull = ArrayList<Livro>() // Lista completa para filtrar localmente
+    private val livrosListFull = ArrayList<Livro>() // Lista completa para filtrar
     private lateinit var requestQueue: RequestQueue
 
     companion object {
@@ -34,7 +34,6 @@ class PesquisarFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pesquisar, container, false)
 
-        // Inicializar componentes
         searchView = view.findViewById(R.id.searchView)
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -44,10 +43,9 @@ class PesquisarFragment : Fragment() {
 
         requestQueue = Volley.newRequestQueue(requireContext())
 
-        // Carregar todos os livros inicialmente
         carregarLivros()
 
-        // Configurar pesquisa
+        // Configurar pesquisa,auto seach a cada letra, evito botao pesquisa
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -88,7 +86,7 @@ class PesquisarFragment : Fragment() {
                         )
 
                         livrosList.add(livro)
-                        livrosListFull.add(livro) // Guardar cópia completa
+                        livrosListFull.add(livro)
                     }
 
                     adapter.notifyDataSetChanged()
@@ -114,7 +112,6 @@ class PesquisarFragment : Fragment() {
         livrosList.clear()
 
         if (texto.isEmpty()) {
-            // Se não há pesquisa, mostrar todos
             livrosList.addAll(livrosListFull)
         } else {
             // Filtrar por título, autor ou categoria

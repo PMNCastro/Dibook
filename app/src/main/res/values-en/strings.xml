@@ -34,7 +34,7 @@
     <string name="error_loading_data">Error loading data</string>
 
     <!-- Pesquisar Fragment -->
-    <string name="search_title">Search Books</string>
+    <string name="search_title">Search</string>
     <string name="search_hint">Search by title, author or category…</string>
     <string name="no_books_found">No books found</string>
     <string name="no_books_for_search">No books found for \"%1$s\"</string>

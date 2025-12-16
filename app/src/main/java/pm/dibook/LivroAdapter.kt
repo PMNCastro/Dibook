@@ -27,7 +27,6 @@ class LivroAdapter(
         // Autores
         holder.txtAutores.text = context.getString(R.string.book_authors, livro.autores)
 
-        // Categoria
         if (livro.categoria.isNotEmpty()) {
             holder.txtCategoria.text = "📚 ${livro.categoria}"
             holder.txtCategoria.visibility = View.VISIBLE
@@ -35,7 +34,6 @@ class LivroAdapter(
             holder.txtCategoria.visibility = View.GONE
         }
 
-        // Editora
         if (livro.editora.isNotEmpty()) {
             holder.txtEditora.text = context.getString(R.string.book_publisher_label, livro.editora)
             holder.txtEditora.visibility = View.VISIBLE
@@ -51,7 +49,6 @@ class LivroAdapter(
             holder.txtISBN.visibility = View.GONE
         }
 
-        // Descrição
         if (livro.descricao.isNotEmpty()) {
             holder.txtDescricao.text = livro.descricao
             holder.txtDescricao.visibility = View.VISIBLE
@@ -59,10 +56,10 @@ class LivroAdapter(
             holder.txtDescricao.visibility = View.GONE
         }
 
-        // Disponibilidade
+        // quantos disponiveis
         holder.txtDisponibilidade.text = context.getString(R.string.available_count, livro.quantidade_disponivel)
 
-        // Status
+        // Status dos livros
         if (livro.disponivel) {
             holder.txtStatus.text = context.getString(R.string.book_available)
             holder.txtStatus.setTextColor(ContextCompat.getColor(context, android.R.color.holo_green_dark))
