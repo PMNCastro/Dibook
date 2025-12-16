@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var requestQueue: RequestQueue
 
     companion object {
-        private const val LOGIN_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/projeto/mobile/login_mobile.php"
+        private const val LOGIN_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/mobile/login_mobile.php"
+
         private const val REGISTER_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/projeto/index.php"
     }
 

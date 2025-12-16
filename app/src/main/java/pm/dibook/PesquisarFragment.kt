@@ -22,7 +22,7 @@ class PesquisarFragment : Fragment() {
     private lateinit var requestQueue: RequestQueue
 
     companion object {
-        private const val DATA_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/projeto/getData.php"
+        private const val DATA_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/mobile/getData.php"
     }
 
     override fun onCreateView(

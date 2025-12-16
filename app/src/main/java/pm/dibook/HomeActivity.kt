@@ -22,11 +22,12 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigation = findViewById(R.id.bottomNavigation)
 
-        // Carregar fragmento inicial (Pesquisar)
+        // Carregar fragmento inicial (HomeFragment)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, PesquisarFragment())
+                .replace(R.id.fragmentContainer, HomeFragment())
                 .commit()
+            bottomNavigation.selectedItemId = R.id.nav_home
         }
 
         bottomNavigation.setOnItemSelectedListener { item ->

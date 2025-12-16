@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
     private lateinit var requestQueue: RequestQueue
 
     companion object {
-        private const val USER_DATA_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/projeto/mobile/getUserData.php"
+        private const val USER_DATA_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/mobile/getUserData.php"
     }
 
     override fun onCreateView(
