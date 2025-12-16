@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Título do Livro -->
+        <TextView
+            android:id="@+id/txtTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Título do Livro"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:drawableStart="@android:drawable/ic_menu_agenda"
+            android:drawablePadding="8dp" />
+
+        <!-- Autores -->
+        <TextView
+            android:id="@+id/txtAutores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Autor(es)"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:textColor="#666666"
+            android:drawableStart="@android:drawable/ic_menu_edit"
+            android:drawablePadding="8dp" />
+
+        <!-- Categoria -->
+        <TextView
+            android:id="@+id/txtCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Categoria"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:textColor="#666666" />
+
+        <!-- Editora -->
+        <TextView
+            android:id="@+id/txtEditora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Editora"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:textColor="#999999" />
+
+        <!-- ISBN -->
+        <TextView
+            android:id="@+id/txtISBN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ISBN"
+            android:textSize="12sp"
+            android:layout_marginTop="2dp"
+            android:textColor="#999999" />
+
+        <!-- Descrição -->
+        <TextView
+            android:id="@+id/txtDescricao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descrição do livro..."
+            android:textSize="13sp"
+            android:layout_marginTop="8dp"
+            android:textColor="#666666"
+            android:maxLines="3"
+            android:ellipsize="end" />
+
+        <!-- Separador -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Disponibilidade -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/txtDisponibilidade"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Disponível: 2"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#4CAF50" />
+
+            <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✓ Disponível"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#4CAF50"
+                android:padding="4dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

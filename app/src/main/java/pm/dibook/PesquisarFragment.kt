@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,13 +17,15 @@ import org.json.JSONArray
 
 class PesquisarFragment : Fragment() {
 
+    private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ItemAdapter
-    private val itemList = ArrayList<Item>()
+    private lateinit var adapter: LivroAdapter
+    private val livrosList = ArrayList<Livro>()
+    private val livrosListFull = ArrayList<Livro>() // Lista completa para filtrar localmente
     private lateinit var requestQueue: RequestQueue
 
     companion object {
-        private const val DATA_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/mobile/getData.php"
+        private const val LIVROS_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/projeto/mobile/getLivros.php"
     }
 
     override fun onCreateView(
@@ -32,50 +35,104 @@ class PesquisarFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pesquisar, container, false)
 
+        // Inicializar componentes
+        searchView = view.findViewById(R.id.searchView)
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        adapter = ItemAdapter(requireContext(), itemList)
+        adapter = LivroAdapter(requireContext(), livrosList)
         recyclerView.adapter = adapter
 
         requestQueue = Volley.newRequestQueue(requireContext())
 
-        carregarDados()
+        // Carregar todos os livros inicialmente
+        carregarLivros()
+
+        // Configurar pesquisa
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filtrarLivros(newText ?: "")
+                return true
+            }
+        })
 
         return view
     }
 
-    private fun carregarDados() {
+    private fun carregarLivros() {
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET,
-            DATA_URL,
+            LIVROS_URL,
             null,
             { response ->
                 try {
-                    itemList.clear()
+                    livrosList.clear()
+                    livrosListFull.clear()
+
                     for (i in 0 until response.length()) {
                         val jsonObject = response.getJSONObject(i)
 
-                        val item = Item(
+                        val livro = Livro(
                             id = jsonObject.getInt("id"),
-                            nome = jsonObject.getString("nome"),
-                            descricao = jsonObject.getString("descricao")
+                            titulo = jsonObject.getString("titulo"),
+                            autores = jsonObject.getString("autores"),
+                            editora = jsonObject.optString("editora", ""),
+                            isbn = jsonObject.optString("isbn", ""),
+                            categoria = jsonObject.optString("categoria", ""),
+                            descricao = jsonObject.optString("descricao", ""),
+                            quantidade_disponivel = jsonObject.getInt("quantidade_disponivel"),
+                            disponivel = jsonObject.getBoolean("disponivel")
                         )
 
-                        itemList.add(item)
+                        livrosList.add(livro)
+                        livrosListFull.add(livro) // Guardar cópia completa
                     }
+
                     adapter.notifyDataSetChanged()
+
+                    if (livrosList.isEmpty()) {
+                        Toast.makeText(context, "Nenhum livro encontrado", Toast.LENGTH_SHORT).show()
+                    }
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(context, "Erro ao processar dados", Toast.LENGTH_SHORT).show()
                 }
             },
             { error ->
-                Toast.makeText(context, "Erro ao carregar dados: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Erro ao carregar livros: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         )
 
         requestQueue.add(jsonArrayRequest)
     }
-}
 
+    private fun filtrarLivros(texto: String) {
+        livrosList.clear()
+
+        if (texto.isEmpty()) {
+            // Se não há pesquisa, mostrar todos
+            livrosList.addAll(livrosListFull)
+        } else {
+            // Filtrar por título, autor ou categoria
+            val textoLower = texto.lowercase()
+            for (livro in livrosListFull) {
+                if (livro.titulo.lowercase().contains(textoLower) ||
+                    livro.autores.lowercase().contains(textoLower) ||
+                    livro.categoria.lowercase().contains(textoLower)) {
+                    livrosList.add(livro)
+                }
+            }
+        }
+
+        adapter.notifyDataSetChanged()
+
+        if (livrosList.isEmpty() && texto.isNotEmpty()) {
+            Toast.makeText(context, "Nenhum livro encontrado para \"$texto\"", Toast.LENGTH_SHORT).show()
+        }
+    }
+}
