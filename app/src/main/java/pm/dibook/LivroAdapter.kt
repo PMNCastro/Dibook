@@ -25,7 +25,7 @@ class LivroAdapter(
         holder.txtTitulo.text = livro.titulo
 
         // Autores
-        holder.txtAutores.text = "Autor(es): ${livro.autores}"
+        holder.txtAutores.text = context.getString(R.string.book_authors, livro.autores)
 
         // Categoria
         if (livro.categoria.isNotEmpty()) {
@@ -37,7 +37,7 @@ class LivroAdapter(
 
         // Editora
         if (livro.editora.isNotEmpty()) {
-            holder.txtEditora.text = "Editora: ${livro.editora}"
+            holder.txtEditora.text = context.getString(R.string.book_publisher_label, livro.editora)
             holder.txtEditora.visibility = View.VISIBLE
         } else {
             holder.txtEditora.visibility = View.GONE
@@ -45,7 +45,7 @@ class LivroAdapter(
 
         // ISBN
         if (livro.isbn.isNotEmpty()) {
-            holder.txtISBN.text = "ISBN: ${livro.isbn}"
+            holder.txtISBN.text = context.getString(R.string.book_isbn_label, livro.isbn)
             holder.txtISBN.visibility = View.VISIBLE
         } else {
             holder.txtISBN.visibility = View.GONE
@@ -60,15 +60,15 @@ class LivroAdapter(
         }
 
         // Disponibilidade
-        holder.txtDisponibilidade.text = "Disponível: ${livro.quantidade_disponivel}"
+        holder.txtDisponibilidade.text = context.getString(R.string.available_count, livro.quantidade_disponivel)
 
         // Status
         if (livro.disponivel) {
-            holder.txtStatus.text = "✓ Disponível"
+            holder.txtStatus.text = context.getString(R.string.book_available)
             holder.txtStatus.setTextColor(ContextCompat.getColor(context, android.R.color.holo_green_dark))
             holder.txtDisponibilidade.setTextColor(ContextCompat.getColor(context, android.R.color.holo_green_dark))
         } else {
-            holder.txtStatus.text = "✗ Indisponível"
+            holder.txtStatus.text = context.getString(R.string.book_unavailable)
             holder.txtStatus.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
             holder.txtDisponibilidade.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
         }

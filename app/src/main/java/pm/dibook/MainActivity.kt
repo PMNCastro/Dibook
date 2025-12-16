@@ -15,7 +15,6 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.textfield.TextInputEditText
 import org.json.JSONObject
-import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,8 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var requestQueue: RequestQueue
 
     companion object {
-        private const val LOGIN_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/mobile/login_mobile.php"
-
+        private const val LOGIN_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/projeto/mobile/login_mobile.php"
         private const val REGISTER_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/projeto/index.php"
     }
 
@@ -37,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inicializar componentes
         txtEmail = findViewById(R.id.Email)
         txtPassword = findViewById(R.id.password)
         btnLogin = findViewById(R.id.btnLogin)
@@ -48,22 +45,22 @@ class MainActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         requestQueue = Volley.newRequestQueue(this)
 
-        // Verificar se há login guardado 7
+        // Verificar se há login guardado
         verificarLoginGuardado()
 
-        // Botão de Login novo
+        //  Login
         btnLogin.setOnClickListener {
             val email = txtEmail.text.toString().trim()
             val password = txtPassword.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show()
             } else {
                 fazerLogin(email, password)
             }
         }
 
-        // Botão de Registar, envia para o URL de registo, webview https://www.youtube.com/watch?v=hyzdE_0WoDE
+        //  Registar
         btnRegistar.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(REGISTER_URL))
             startActivity(browserIntent)
@@ -80,9 +77,6 @@ class MainActivity : AppCompatActivity() {
             txtEmail.setText(emailGuardado)
             txtPassword.setText(passwordGuardada)
             checkGuardar.isChecked = true
-
-            // Pode fazer login automático se usar o guardar
-            // fazerLogin(emailGuardado ?: "", passwordGuardada ?: "")
         }
     }
 
@@ -96,41 +90,59 @@ class MainActivity : AppCompatActivity() {
                     val message = jsonResponse.getString("message")
 
                     if (success) {
-                        // Guardar login se checkbox estiver marcado
-                        val editor = sharedPreferences.edit()
-                        if (checkGuardar.isChecked) {
-                            editor.putBoolean("loginGuardado", true)
-                            editor.putString("email", email)
-                            editor.putString("password", password)
-                        } else {
-                            editor.clear()
-                        }
-
-                        // Guardar dados do utilizador
+                        // Verificar tipo de utilizador
                         if (jsonResponse.has("user")) {
                             val user = jsonResponse.getJSONObject("user")
+                            val role = user.getString("role")
+
+                            //  BLOQUEIO: Apenas clientes podem usar a app
+                            if (role == "admin" || role == "funcionario") {
+                                Toast.makeText(
+                                    this,
+                                    "⚠️ Esta aplicação é apenas para clientes.\n\nAdministradores e funcionários devem usar o backoffice web em:\nhttps://esan-tesp-ds-paw.web.ua.pt",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                return@StringRequest
+                            }
+
+                            val editor = sharedPreferences.edit()
+
+                            // Guardar login se checkbox estiver marcado
+                            if (checkGuardar.isChecked) {
+                                editor.putBoolean("loginGuardado", true)
+                                editor.putString("email", email)
+                                editor.putString("password", password)
+                            } else {
+                                editor.putBoolean("loginGuardado", false)
+                                editor.remove("email")
+                                editor.remove("password")
+                            }
+
+                            // Guardar dados do utilizador
                             editor.putBoolean("isLoggedIn", true)
                             editor.putString("userId", user.getString("id"))
                             editor.putString("userName", user.getString("name"))
+                            editor.putString("userRole", role)
+                            editor.apply()
+
+                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+                            val intent = Intent(this, HomeActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Toast.makeText(this, getString(R.string.processing_error), Toast.LENGTH_SHORT).show()
                         }
-                        editor.apply()
-
-                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-
-                        // Ir para HomeActivity
-                        val intent = Intent(this, HomeActivity::class.java)
-                        startActivity(intent)
-                        finish()
                     } else {
                         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Erro ao processar resposta", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.processing_error), Toast.LENGTH_SHORT).show()
                     e.printStackTrace()
                 }
             },
             { error ->
-                Toast.makeText(this, "Erro de conexão: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.connection_error, error.message), Toast.LENGTH_SHORT).show()
             }) {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()

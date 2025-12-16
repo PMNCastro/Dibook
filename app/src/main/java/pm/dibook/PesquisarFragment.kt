@@ -13,7 +13,6 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
-import org.json.JSONArray
 
 class PesquisarFragment : Fragment() {
 
@@ -95,16 +94,16 @@ class PesquisarFragment : Fragment() {
                     adapter.notifyDataSetChanged()
 
                     if (livrosList.isEmpty()) {
-                        Toast.makeText(context, "Nenhum livro encontrado", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, getString(R.string.no_books_found), Toast.LENGTH_SHORT).show()
                     }
 
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Toast.makeText(context, "Erro ao processar dados", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.error_processing_data), Toast.LENGTH_SHORT).show()
                 }
             },
             { error ->
-                Toast.makeText(context, "Erro ao carregar livros: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.error_loading_books, error.message ?: ""), Toast.LENGTH_SHORT).show()
             }
         )
 
@@ -132,7 +131,7 @@ class PesquisarFragment : Fragment() {
         adapter.notifyDataSetChanged()
 
         if (livrosList.isEmpty() && texto.isNotEmpty()) {
-            Toast.makeText(context, "Nenhum livro encontrado para \"$texto\"", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.no_books_for_search, texto), Toast.LENGTH_SHORT).show()
         }
     }
 }

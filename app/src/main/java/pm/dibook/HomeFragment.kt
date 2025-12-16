@@ -13,7 +13,6 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import org.json.JSONObject
 
 class HomeFragment : Fragment() {
 
@@ -25,7 +24,7 @@ class HomeFragment : Fragment() {
     private lateinit var requestQueue: RequestQueue
 
     companion object {
-        private const val USER_DATA_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/mobile/getUserData.php"
+        private const val USER_DATA_URL = "https://esan-tesp-ds-paw.web.ua.pt/tesp-ds-g29/projeto/mobile/getUserData.php"
     }
 
     override fun onCreateView(
@@ -52,17 +51,17 @@ class HomeFragment : Fragment() {
 
     private fun carregarDadosUtilizador() {
         val userId = sharedPreferences.getString("userId", "")
-        val userName = sharedPreferences.getString("userName", "Utilizador")
+        val userName = sharedPreferences.getString("userName", getString(R.string.welcome))
 
         // Mostrar nome imediatamente
-        txtNome.text = "Bem-vindo, $userName!"
+        txtNome.text = getString(R.string.welcome_user, userName)
 
         if (userId.isNullOrEmpty()) {
-            Toast.makeText(context, "Erro: ID do utilizador não encontrado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.user_id_not_found), Toast.LENGTH_SHORT).show()
             return
         }
 
-        // vai buscar os dados do servidor
+        // Buscar dados do servidor
         val url = "$USER_DATA_URL?user_id=$userId"
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -73,22 +72,22 @@ class HomeFragment : Fragment() {
                     val emprestimosDevolvidos = response.getInt("emprestimos_devolvidos")
                     val multasPendentes = response.getString("multas_pendentes")
 
-                    txtEmprestimosAtivos.text = "Livros Emprestados: $emprestimosAtivos"
-                    txtEmprestimosDevolvidos.text = "Livros Devolvidos: $emprestimosDevolvidos"
-                    txtMultas.text = "Multas Pendentes: €$multasPendentes"
+                    txtEmprestimosAtivos.text = getString(R.string.borrowed_books, emprestimosAtivos)
+                    txtEmprestimosDevolvidos.text = getString(R.string.returned_books, emprestimosDevolvidos)
+                    txtMultas.text = getString(R.string.pending_fines, multasPendentes)
 
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Toast.makeText(context, "Erro ao processar dados", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.error_processing_data), Toast.LENGTH_SHORT).show()
                 }
             },
             { error ->
                 // Mostrar valores padrão em caso de erro
-                txtEmprestimosAtivos.text = "Livros Emprestados: 0"
-                txtEmprestimosDevolvidos.text = "Livros Devolvidos: 0"
-                txtMultas.text = "Multas Pendentes: €0.00"
+                txtEmprestimosAtivos.text = getString(R.string.borrowed_books, 0)
+                txtEmprestimosDevolvidos.text = getString(R.string.returned_books, 0)
+                txtMultas.text = getString(R.string.pending_fines, "0.00")
 
-                Toast.makeText(context, "Erro ao carregar dados: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.error_loading_data), Toast.LENGTH_SHORT).show()
             }
         )
 
