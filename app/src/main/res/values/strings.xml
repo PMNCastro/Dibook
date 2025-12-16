@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App -->
-    <string name="app_name">Dibook</string>
+    <string name="app_name" translatable="false">Dibook</string>
 
     <!-- Login -->
-    <string name="email">Email</string>
+    <string name="email" translatable="false">Email</string>
     <string name="password">Password</string>
     <string name="login_button">Entrar</string>
     <string name="register_button">Registar</string>
@@ -61,7 +61,7 @@
 
     <!-- Geral -->
     <string name="loading">A carregar…</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="error">Erro</string>
     <string name="success">Sucesso</string>
