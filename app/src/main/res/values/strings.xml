@@ -1,3 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App -->
     <string name="app_name">Dibook</string>
+
+    <!-- Login -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_button">Entrar</string>
+    <string name="register_button">Registar</string>
+    <string name="save_login">Guardar</string>
+    <string name="fill_all_fields">Preencha todos os campos</string>
+    <string name="login_success">Login realizado com sucesso</string>
+    <string name="login_error">Erro ao fazer login</string>
+    <string name="connection_error">Erro de conexão: %1$s</string>
+    <string name="processing_error">Erro ao processar resposta</string>
+
+    <!-- Menu Bottom Navigation -->
+    <string name="menu_home">Home</string>
+    <string name="menu_search">Pesquisar</string>
+    <string name="menu_favorites">Favoritos</string>
+    <string name="menu_logout">Logout</string>
+
+    <!-- Home Fragment -->
+    <string name="welcome">Bem-vindo!</string>
+    <string name="welcome_user">Bem-vindo, %1$s!</string>
+    <string name="borrowed_books">Livros Emprestados: %1$d</string>
+    <string name="returned_books">Livros Devolvidos: %1$d</string>
+    <string name="pending_fines">Multas Pendentes: €%1$s</string>
+    <string name="borrowed_description">Livros atualmente emprestados</string>
+    <string name="returned_description">Total de livros já devolvidos</string>
+    <string name="fines_description">Valor total de multas a pagar</string>
+    <string name="user_id_not_found">Erro: ID do utilizador não encontrado</string>
+    <string name="error_loading_data">Erro ao carregar dados</string>
+
+    <!-- Pesquisar Fragment -->
+    <string name="search_title">Pesquisar Livros</string>
+    <string name="search_hint">Pesquisar por título, autor ou categoria…</string>
+    <string name="no_books_found">Nenhum livro encontrado</string>
+    <string name="no_books_for_search">Nenhum livro encontrado para \"%1$s\"</string>
+    <string name="error_loading_books">Erro ao carregar livros: %1$s</string>
+    <string name="error_processing_data">Erro ao processar dados</string>
+
+    <!-- Item Livro -->
+    <string name="book_title">Título do Livro</string>
+    <string name="book_author">Autor(es)</string>
+    <string name="book_authors">Autor(es): %1$s</string>
+    <string name="book_category">Categoria</string>
+    <string name="book_publisher">Editora</string>
+    <string name="book_publisher_label">Editora: %1$s</string>
+    <string name="book_isbn">ISBN</string>
+    <string name="book_isbn_label">ISBN: %1$s</string>
+    <string name="book_description">Descrição do livro…</string>
+    <string name="available_count">Disponível: %1$d</string>
+    <string name="book_available">✓ Disponível</string>
+    <string name="book_unavailable">✗ Indisponível</string>
+
+    <!-- Favoritos Fragment -->
+    <string name="favorites_title">Favoritos</string>
+    <string name="favorite_books">Livros favoritos</string>
+
+    <!-- Geral -->
+    <string name="loading">A carregar…</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="error">Erro</string>
+    <string name="success">Sucesso</string>
 </resources>

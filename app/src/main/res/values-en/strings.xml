@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Dibook</string>
+
+    <!-- Login -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="save_login">Save</string>
+    <string name="fill_all_fields">Fill in all fields</string>
+    <string name="login_success">Login successful</string>
+    <string name="login_error">Login error</string>
+    <string name="connection_error">Connection error: %1$s</string>
+    <string name="processing_error">Error processing response</string>
+
+    <!-- Menu Bottom Navigation -->
+    <string name="menu_home">Home</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_favorites">Favorites</string>
+    <string name="menu_logout">Logout</string>
+
+    <!-- Home Fragment -->
+    <string name="welcome">Welcome!</string>
+    <string name="welcome_user">Welcome, %1$s!</string>
+    <string name="borrowed_books">Borrowed Books: %1$d</string>
+    <string name="returned_books">Returned Books: %1$d</string>
+    <string name="pending_fines">Pending Fines: €%1$s</string>
+    <string name="borrowed_description">Currently borrowed books</string>
+    <string name="returned_description">Total books already returned</string>
+    <string name="fines_description">Total amount of fines to pay</string>
+    <string name="user_id_not_found">Error: User ID not found</string>
+    <string name="error_loading_data">Error loading data</string>
+
+    <!-- Pesquisar Fragment -->
+    <string name="search_title">Search Books</string>
+    <string name="search_hint">Search by title, author or category…</string>
+    <string name="no_books_found">No books found</string>
+    <string name="no_books_for_search">No books found for \"%1$s\"</string>
+    <string name="error_loading_books">Error loading books: %1$s</string>
+    <string name="error_processing_data">Error processing data</string>
+
+    <!-- Item Livro -->
+    <string name="book_title">Book Title</string>
+    <string name="book_author">Author(s)</string>
+    <string name="book_authors">Author(s): %1$s</string>
+    <string name="book_category">Category</string>
+    <string name="book_publisher">Publisher</string>
+    <string name="book_publisher_label">Publisher: %1$s</string>
+    <string name="book_isbn">ISBN</string>
+    <string name="book_isbn_label">ISBN: %1$s</string>
+    <string name="book_description">Book description…</string>
+    <string name="available_count">Available: %1$d</string>
+    <string name="book_available">✓ Available</string>
+    <string name="book_unavailable">✗ Unavailable</string>
+
+    <!-- Favoritos Fragment -->
+    <string name="favorites_title">Favorites</string>
+    <string name="favorite_books">Favorite books</string>
+
+    <!-- Geral -->
+    <string name="loading">Loading…</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="error">Error</string>
+    <string name="success">Success</string>
+</resources>
