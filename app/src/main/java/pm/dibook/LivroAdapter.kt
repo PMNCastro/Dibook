@@ -4,13 +4,15 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class LivroAdapter(
     private val context: Context,
-    private val livrosList: List<Livro>
+    private val livrosList: List<Livro>,
+    private val onFavoriteClick: ((Livro, Int) -> Unit)? = null  // NOVO: callback para favoritos
 ) : RecyclerView.Adapter<LivroAdapter.LivroViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LivroViewHolder {
@@ -27,6 +29,7 @@ class LivroAdapter(
         // Autores
         holder.txtAutores.text = context.getString(R.string.book_authors, livro.autores)
 
+        // Categoria
         if (livro.categoria.isNotEmpty()) {
             holder.txtCategoria.text = "📚 ${livro.categoria}"
             holder.txtCategoria.visibility = View.VISIBLE
@@ -34,6 +37,7 @@ class LivroAdapter(
             holder.txtCategoria.visibility = View.GONE
         }
 
+        // Editora
         if (livro.editora.isNotEmpty()) {
             holder.txtEditora.text = context.getString(R.string.book_publisher_label, livro.editora)
             holder.txtEditora.visibility = View.VISIBLE
@@ -49,6 +53,7 @@ class LivroAdapter(
             holder.txtISBN.visibility = View.GONE
         }
 
+        // Descrição
         if (livro.descricao.isNotEmpty()) {
             holder.txtDescricao.text = livro.descricao
             holder.txtDescricao.visibility = View.VISIBLE
@@ -56,10 +61,10 @@ class LivroAdapter(
             holder.txtDescricao.visibility = View.GONE
         }
 
-        // quantos disponiveis
+        // Disponibilidade
         holder.txtDisponibilidade.text = context.getString(R.string.available_count, livro.quantidade_disponivel)
 
-        // Status dos livros
+        // Status
         if (livro.disponivel) {
             holder.txtStatus.text = context.getString(R.string.book_available)
             holder.txtStatus.setTextColor(ContextCompat.getColor(context, android.R.color.holo_green_dark))
@@ -69,9 +74,25 @@ class LivroAdapter(
             holder.txtStatus.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
             holder.txtDisponibilidade.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
         }
+
+        // ⭐ BOTÃO FAVORITO
+        updateFavoriteButton(holder.btnFavorite, livro.is_favorite)
+
+        holder.btnFavorite.setOnClickListener {
+            onFavoriteClick?.invoke(livro, position)
+        }
     }
 
     override fun getItemCount(): Int = livrosList.size
+
+    // Atualizar ícone de favorito
+    private fun updateFavoriteButton(button: ImageButton, isFavorite: Boolean) {
+        if (isFavorite) {
+            button.setImageResource(android.R.drawable.star_big_on)  // Estrela cheia
+        } else {
+            button.setImageResource(android.R.drawable.star_big_off) // Estrela vazia
+        }
+    }
 
     class LivroViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtTitulo: TextView = itemView.findViewById(R.id.txtTitulo)
@@ -82,5 +103,6 @@ class LivroAdapter(
         val txtDescricao: TextView = itemView.findViewById(R.id.txtDescricao)
         val txtDisponibilidade: TextView = itemView.findViewById(R.id.txtDisponibilidade)
         val txtStatus: TextView = itemView.findViewById(R.id.txtStatus)
+        val btnFavorite: ImageButton = itemView.findViewById(R.id.btnFavorite)  // NOVO
     }
 }

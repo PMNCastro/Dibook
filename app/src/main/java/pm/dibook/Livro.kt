@@ -9,5 +9,6 @@ data class Livro(
     val categoria: String,
     val descricao: String,
     val quantidade_disponivel: Int,
-    val disponivel: Boolean
+    val disponivel: Boolean,
+    var is_favorite: Boolean = false  // NOVO CAMPO
 )
