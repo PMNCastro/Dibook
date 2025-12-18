@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                             val user = jsonResponse.getJSONObject("user")
                             val role = user.getString("role")
 
-                            //   Apenas o cliente pode utilizar
+                            //   Apenas o cliente pode utilizar a app
                             if (role == "admin" || role == "funcionario") {
                                 Toast.makeText(
                                     this,
