@@ -98,11 +98,9 @@ class PesquisarFragment : Fragment() {
                             disponivel = jsonObject.getBoolean("disponivel"),
                             is_favorite = false  // Será atualizado depois
                         )
-
                         livrosList.add(livro)
                         livrosListFull.add(livro)
                     }
-
                     adapter.notifyDataSetChanged()
 
                     if (livrosList.isEmpty()) {
@@ -189,7 +187,6 @@ class PesquisarFragment : Fragment() {
                                 break
                             }
                         }
-
                         adapter.notifyItemChanged(position)
 
                         val message = if (livro.is_favorite) "⭐ Adicionado aos favoritos" else "Removido dos favoritos"
