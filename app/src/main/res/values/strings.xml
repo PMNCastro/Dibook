@@ -54,12 +54,13 @@
     <string name="available_count">Disponível: %1$d</string>
     <string name="book_available">✓ Disponível</string>
     <string name="book_unavailable">✗ Indisponível</string>
+    <string name="book_cover">Capa do livro</string>
+    <string name="add_to_favorites">Adicionar aos favoritos</string>
 
     <!-- Favoritos Fragment -->
     <string name="favorites_title">Favoritos</string>
     <string name="favorite_books">Livros favoritos</string>
 
-    <!-- Geral -->
     <string name="loading">A carregar…</string>
     <string name="ok" translatable="false">OK</string>
     <string name="cancel">Cancelar</string>

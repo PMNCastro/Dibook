@@ -5,14 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class LivroAdapter(
     private val context: Context,
     private val livrosList: List<Livro>,
-    private val onFavoriteClick: ((Livro, Int) -> Unit)? = null  // NOVO: callback para favoritos
+    private val onFavoriteClick: ((Livro, Int) -> Unit)? = null
 ) : RecyclerView.Adapter<LivroAdapter.LivroViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LivroViewHolder {
@@ -61,6 +63,20 @@ class LivroAdapter(
             holder.txtDescricao.visibility = View.GONE
         }
 
+        // capa do livro
+        if (livro.isbn.isNotEmpty()) {
+            val coverUrl = "https://covers.openlibrary.org/b/isbn/${livro.isbn}-M.jpg"
+
+            Glide.with(context)
+                .load(coverUrl)
+                .placeholder(android.R.drawable.ic_menu_gallery)  // Enquanto carrega
+                .error(android.R.drawable.ic_menu_gallery)        // Se falhar
+                .into(holder.imgCapa)
+        } else {
+            // Sem ISBN, mostra placeholder
+            holder.imgCapa.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
+
         // Disponibilidade
         holder.txtDisponibilidade.text = context.getString(R.string.available_count, livro.quantidade_disponivel)
 
@@ -75,7 +91,7 @@ class LivroAdapter(
             holder.txtDisponibilidade.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
         }
 
-        // ⭐ BOTÃO FAVORITO
+        // botao favorito
         updateFavoriteButton(holder.btnFavorite, livro.is_favorite)
 
         holder.btnFavorite.setOnClickListener {
@@ -88,9 +104,9 @@ class LivroAdapter(
     // Atualizar ícone de favorito
     private fun updateFavoriteButton(button: ImageButton, isFavorite: Boolean) {
         if (isFavorite) {
-            button.setImageResource(android.R.drawable.star_big_on)  // Estrela cheia
+            button.setImageResource(android.R.drawable.star_big_on)  //  cheia
         } else {
-            button.setImageResource(android.R.drawable.star_big_off) // Estrela vazia
+            button.setImageResource(android.R.drawable.star_big_off) //  vazia
         }
     }
 
@@ -103,6 +119,7 @@ class LivroAdapter(
         val txtDescricao: TextView = itemView.findViewById(R.id.txtDescricao)
         val txtDisponibilidade: TextView = itemView.findViewById(R.id.txtDisponibilidade)
         val txtStatus: TextView = itemView.findViewById(R.id.txtStatus)
-        val btnFavorite: ImageButton = itemView.findViewById(R.id.btnFavorite)  // NOVO
+        val btnFavorite: ImageButton = itemView.findViewById(R.id.btnFavorite)
+        val imgCapa: ImageView = itemView.findViewById(R.id.imgCapa)
     }
 }

@@ -7,135 +7,145 @@
     app:cardElevation="4dp"
     app:cardCornerRadius="8dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
-        <!-- Cabeçalho: Título + Botão Favorito -->
+        <!--IMAGEM DA CAPA  -->
+        <ImageView
+            android:id="@+id/imgCapa"
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="12dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/book_cover" />
+
+        <!--  ESTRELA FAVORITO lado dirito -->
+        <ImageButton
+            android:id="@+id/btnFavorite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignTop="@id/imgCapa"
+            android:layout_alignEnd="@id/imgCapa"
+            android:layout_marginTop="-6dp"
+            android:layout_marginEnd="-6dp"
+            android:background="@android:color/transparent"
+            android:src="@android:drawable/star_big_off"
+            android:contentDescription="@string/add_to_favorites"
+            android:padding="2dp"
+            android:elevation="4dp" />
+
+        <!-- INFORMAÇÕES  -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_toStartOf="@id/imgCapa"
+            android:orientation="vertical">
 
-            <!-- Título do Livro -->
+            <!-- Título -->
             <TextView
                 android:id="@+id/txtTitulo"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/book_title"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#000000"
-                android:drawableStart="@android:drawable/ic_menu_agenda"
-                android:drawablePadding="8dp" />
+                android:maxLines="2"
+                android:ellipsize="end" />
 
-            <!-- Botão Favorito (Estrela) -->
-            <ImageButton
-                android:id="@+id/btnFavorite"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/star_big_off"
-                android:contentDescription="Adicionar aos favoritos"
-                android:padding="8dp" />
+            <!-- Autores -->
+            <TextView
+                android:id="@+id/txtAutores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/book_author"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"
+                android:textColor="#666666"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <!-- Categoria -->
+            <TextView
+                android:id="@+id/txtCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/book_category"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp"
+                android:textColor="#999999"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <!-- Editora -->
+            <TextView
+                android:id="@+id/txtEditora"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/book_publisher"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp"
+                android:textColor="#999999"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <!-- ISbn -->
+            <TextView
+                android:id="@+id/txtISBN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <!-- Descrição  -->
+            <TextView
+                android:id="@+id/txtDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <!-- Separador -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EEEEEE"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="6dp" />
+
+            <!-- Disponibilidade -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/txtDisponibilidade"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/available_count"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#4CAF50" />
+
+                <TextView
+                    android:id="@+id/txtStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/book_available"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#4CAF50"
+                    android:padding="4dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Autores -->
-        <TextView
-            android:id="@+id/txtAutores"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/book_author"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            android:textColor="#666666"
-            android:drawableStart="@android:drawable/ic_menu_edit"
-            android:drawablePadding="8dp" />
-
-        <!-- Categoria -->
-        <TextView
-            android:id="@+id/txtCategoria"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/book_category"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            android:textColor="#666666" />
-
-        <!-- Editora -->
-        <TextView
-            android:id="@+id/txtEditora"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/book_publisher"
-            android:textSize="12sp"
-            android:layout_marginTop="4dp"
-            android:textColor="#999999" />
-
-        <!-- ISBN -->
-        <TextView
-            android:id="@+id/txtISBN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/book_isbn"
-            android:textSize="12sp"
-            android:layout_marginTop="2dp"
-            android:textColor="#999999" />
-
-        <!-- Descrição -->
-        <TextView
-            android:id="@+id/txtDescricao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/book_description"
-            android:textSize="13sp"
-            android:layout_marginTop="8dp"
-            android:textColor="#666666"
-            android:maxLines="3"
-            android:ellipsize="end" />
-
-        <!-- Separador -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#EEEEEE"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Disponibilidade -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/txtDisponibilidade"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/available_count"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="#4CAF50" />
-
-            <TextView
-                android:id="@+id/txtStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/book_available"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="#4CAF50"
-                android:padding="4dp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
+
