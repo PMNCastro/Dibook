@@ -65,7 +65,7 @@ class LivroAdapter(
 
         // capa do livro
         if (livro.isbn.isNotEmpty()) {
-            val coverUrl = "https://covers.openlibrary.org/b/isbn/${livro.isbn}-M.jpg"
+            val coverUrl = "https://books.google.com/books/publisher/content/images/frontcover/${livro.isbn}?fife=w200-h300" //biblioteca google books a open library tinha menos capas de livros portugueses
 
             Glide.with(context)
                 .load(coverUrl)
