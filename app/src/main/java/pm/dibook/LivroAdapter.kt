@@ -63,9 +63,13 @@ class LivroAdapter(
             holder.txtDescricao.visibility = View.GONE
         }
 
-        // capa do livro
+        // OPEN LIBRARY API
         if (livro.isbn.isNotEmpty()) {
-            val coverUrl = "https://books.google.com/books/publisher/content/images/frontcover/${livro.isbn}?fife=w200-h300" //biblioteca google books a open library tinha menos capas de livros portugueses
+            // Limpar ISBN: remover hífens, espaços e outros caracteres inválidos
+            val isbnLimpo = livro.isbn.replace(Regex("[^0-9X]"), "").uppercase()
+
+            // Open Library API (consistente com aplicação web)
+            val coverUrl = "https://covers.openlibrary.org/b/isbn/${isbnLimpo}-M.jpg"
 
             Glide.with(context)
                 .load(coverUrl)
@@ -91,7 +95,7 @@ class LivroAdapter(
             holder.txtDisponibilidade.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
         }
 
-        // botao favorito
+        // Botão favorito
         updateFavoriteButton(holder.btnFavorite, livro.is_favorite)
 
         holder.btnFavorite.setOnClickListener {
@@ -104,9 +108,9 @@ class LivroAdapter(
     // Atualizar ícone de favorito
     private fun updateFavoriteButton(button: ImageButton, isFavorite: Boolean) {
         if (isFavorite) {
-            button.setImageResource(android.R.drawable.star_big_on)  //  cheia
+            button.setImageResource(android.R.drawable.star_big_on)  // Estrela cheia
         } else {
-            button.setImageResource(android.R.drawable.star_big_off) //  vazia
+            button.setImageResource(android.R.drawable.star_big_off) // Estrela vazia
         }
     }
 
