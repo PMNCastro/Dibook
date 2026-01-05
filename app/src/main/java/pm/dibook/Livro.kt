@@ -10,5 +10,5 @@ data class Livro(
     val descricao: String,
     val quantidade_disponivel: Int,
     val disponivel: Boolean,
-    var is_favorite: Boolean = false  // NOVO CAMPO
+    var is_favorite: Boolean = false
 )

@@ -4,10 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.concurrent.TimeUnit
 
 class HomeActivity : AppCompatActivity() {
 
@@ -22,7 +25,7 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigation = findViewById(R.id.bottomNavigation)
 
-        // Carregar fragmento inicial (HomeFragment)
+        // Carregar HomeFragment
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, HomeFragment())
@@ -51,15 +54,35 @@ class HomeActivity : AppCompatActivity() {
 
             true
         }
+
+        // Iniciar notificações dos favoritos
+        iniciarNotificacoes()
+    }
+
+    private fun iniciarNotificacoes() {
+        // Criar requisição periódica, verifica a cada 30 minutos
+        val notificationWork = PeriodicWorkRequestBuilder<NotificationWorker>(
+            30, TimeUnit.MINUTES // Intervalo de verificação
+        ).build()
+
+        // Agendar o trabalho
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "FavoritesNotification",
+            ExistingPeriodicWorkPolicy.KEEP,
+            notificationWork
+        )
     }
 
     private fun fazerLogout() {
-        // Limpar apenas o estado de login, mas manter credenciais se "Guardar" estiver marcado
+        // Limpar apenas o estado de login, mas manter credenciais se o Guardar estiver marcado
         val editor = sharedPreferences.edit()
         editor.putBoolean("isLoggedIn", false)
         editor.remove("userId")
         editor.remove("userName")
         editor.apply()
+
+        // Cancelar notificações ao fazer logout, mas app minimizada nao cancela nots
+        WorkManager.getInstance(this).cancelUniqueWork("FavoritesNotification")
 
         // Voltar para MainActivity
         val intent = Intent(this, MainActivity::class.java)
@@ -71,7 +94,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        // Verificar se o utilizador ainda está logado
+        // Verificar se o utilizador ainda está com login
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         if (!isLoggedIn) {
             val intent = Intent(this, MainActivity::class.java)
