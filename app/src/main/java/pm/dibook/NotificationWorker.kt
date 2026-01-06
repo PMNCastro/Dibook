@@ -11,7 +11,8 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
-import kotlin.concurrent.thread
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class NotificationWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
 
@@ -22,7 +23,6 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Worker(co
     }
 
     override fun doWork(): Result {
-        // Verificar se o utilizador está com login e obter o userId
         val sharedPreferences = applicationContext.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         val userId = sharedPreferences.getString("userId", "")
@@ -31,36 +31,40 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Worker(co
             return Result.success()
         }
 
-        // Criar canal  notificação
         createNotificationChannel()
 
-        // Verificar mudanças nos favoritos
-        var workResult = Result.success()
+        return verificarFavoritos(userId)
+    }
 
-        thread {
-            try {
-                val requestQueue = Volley.newRequestQueue(applicationContext)
-                val url = "$CHECK_FAVORITES_URL?user_id=$userId"
+    private fun verificarFavoritos(userId: String): Result {
+        val latch = CountDownLatch(1)
+        var result = Result.success()
 
-                val jsonArrayRequest = JsonArrayRequest(
-                    Request.Method.GET, url, null,
-                    { response ->
-                        processNotifications(response)
-                    },
-                    { error ->
-                        // Erro ao verificar, tenta novamente
-                        workResult = Result.retry()
-                    }
-                )
+        val requestQueue = Volley.newRequestQueue(applicationContext)
+        val url = "$CHECK_FAVORITES_URL?user_id=$userId"
 
-                requestQueue.add(jsonArrayRequest)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                workResult = Result.failure()
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET, url, null,
+            { response ->
+                processNotifications(response)
+                latch.countDown()
+            },
+            { error ->
+                result = Result.retry()
+                latch.countDown()
             }
-        }.join() // Aguarda a thread terminar
+        )
 
-        return workResult
+        requestQueue.add(jsonArrayRequest)
+
+// 30 segundos de espera
+        try {
+            latch.await(30, TimeUnit.SECONDS)
+        } catch (e: InterruptedException) {
+            return Result.retry()
+        }
+
+        return result
     }
 
     private fun processNotifications(response: JSONArray) {
@@ -70,27 +74,30 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Worker(co
                 val livroId = item.getInt("livro_id")
                 val livroNome = item.getString("titulo")
                 val quantidadeDisponivel = item.getInt("quantidade_disponivel")
-                val mudou = item.getBoolean("mudou")
-                val ficouDisponivel = item.optBoolean("ficou_disponivel", false)
 
-                if (mudou) {
-                    if (ficouDisponivel && quantidadeDisponivel > 0) {
-                        // Livro ficou disponível
+                val prefs = applicationContext.getSharedPreferences("FavoritesCache", Context.MODE_PRIVATE)
+                val lastQuantity = prefs.getInt("livro_$livroId", -1)
+
+                if (lastQuantity == -1) {
+                    saveLastQuantity(livroId, quantidadeDisponivel)
+                    continue
+                }
+
+                if (lastQuantity != quantidadeDisponivel) {
+                    if (lastQuantity == 0 && quantidadeDisponivel > 0) {
                         showNotification(
-                            "Livro Disponível!",
+                            "Livro Disponível! 📚",
                             "Encontra-se disponível $quantidadeDisponivel cópia(s) do $livroNome, para empréstimo",
                             livroId
                         )
-                    } else if (quantidadeDisponivel == 0) {
-                        // Livro ficou esgotado
+                    } else if (lastQuantity > 0 && quantidadeDisponivel == 0) {
                         showNotification(
-                            "Livro Esgotado",
+                            "Livro Indisponível",
                             "O $livroNome, que tem nos favoritos, encontra-se indisponível de momento",
                             livroId
                         )
                     }
 
-                    // Atualizar última quantidade conhecida
                     saveLastQuantity(livroId, quantidadeDisponivel)
                 }
             }

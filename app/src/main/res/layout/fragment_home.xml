@@ -42,7 +42,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Card Empréstimos Ativos -->
+        <!-- Cartao Empréstimos Ativos -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Card Empréstimos Devolvidos -->
+        <!-- Cartao Empréstimos Devolvidos -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Card Multas -->
+        <!-- cartao Multas -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -60,7 +60,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun iniciarNotificacoes() {
-        // Criar requisição periódica, verifica a cada 30 minutos
+        // Criar requisição periódica, a cada 30 minutos, poderia ter reduzido para 15 mas faria o utilizador gastar mais bateria
         val notificationWork = PeriodicWorkRequestBuilder<NotificationWorker>(
             30, TimeUnit.MINUTES // Intervalo de verificação
         ).build()

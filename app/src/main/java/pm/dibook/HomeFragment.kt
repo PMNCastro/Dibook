@@ -34,7 +34,6 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // Inicializar componentes
         txtNome = view.findViewById(R.id.txtNome)
         txtEmprestimosAtivos = view.findViewById(R.id.txtEmprestimosAtivos)
         txtEmprestimosDevolvidos = view.findViewById(R.id.txtEmprestimosDevolvidos)
@@ -43,7 +42,6 @@ class HomeFragment : Fragment() {
         sharedPreferences = requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         requestQueue = Volley.newRequestQueue(requireContext())
 
-        // Carregar dados do utilizador
         carregarDadosUtilizador()
 
         return view
@@ -53,7 +51,6 @@ class HomeFragment : Fragment() {
         val userId = sharedPreferences.getString("userId", "")
         val userName = sharedPreferences.getString("userName", getString(R.string.welcome))
 
-        // Mostrar nome imediatamente
         txtNome.text = getString(R.string.welcome_user, userName)
 
         if (userId.isNullOrEmpty()) {
@@ -61,7 +58,6 @@ class HomeFragment : Fragment() {
             return
         }
 
-        // Buscar dados do servidor
         val url = "$USER_DATA_URL?user_id=$userId"
 
         val jsonObjectRequest = JsonObjectRequest(
@@ -82,7 +78,6 @@ class HomeFragment : Fragment() {
                 }
             },
             { error ->
-                // Mostrar valores padrão em caso de erro
                 txtEmprestimosAtivos.text = getString(R.string.borrowed_books, 0)
                 txtEmprestimosDevolvidos.text = getString(R.string.returned_books, 0)
                 txtMultas.text = getString(R.string.pending_fines, "0.00")
