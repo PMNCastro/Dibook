@@ -10,6 +10,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import android.view.animation.DecelerateInterpolator // para animação
+import android.animation.ObjectAnimator
+import android.animation.AnimatorSet
+
+
 
 class LivroAdapter(
     private val context: Context,
@@ -99,7 +104,8 @@ class LivroAdapter(
         updateFavoriteButton(holder.btnFavorite, livro.is_favorite)
 
         holder.btnFavorite.setOnClickListener {
-            onFavoriteClick?.invoke(livro, position)
+            animateFavoriteButton(holder.btnFavorite, livro.is_favorite)  //animaçao antes de chamar o callback
+            onFavoriteClick?.invoke(livro, position) // Callback para atualizar servidor
         }
     }
 
@@ -112,6 +118,57 @@ class LivroAdapter(
         } else {
             button.setImageResource(android.R.drawable.star_big_off) // Estrela vazia
         }
+    }
+
+    // animaçao ao clicar no botão, zoom e cor de fundo
+    private fun animateFavoriteButton(button: ImageButton, isFavorite: Boolean) {
+        //  cor do feedback
+        val feedbackColor = if (isFavorite) {
+            // Remove,  Vermelho suave com transparência
+            0x55FF5555.toInt()  // ARGB: 55 = ~33% opacity, FF5555 = vermelho suave
+        } else {
+            // Adiciona,Verde suave com transparência
+            0x5555FF55.toInt()  // ARGB: 55 = ~33% opacity, 55FF55 = verde suave
+        }
+
+        // Guarda cor original
+        val originalBackground = button.background
+
+        // Aplicar feedback colorido temporário
+        button.setBackgroundColor(feedbackColor)
+
+
+        val scaleUp = AnimatorSet().apply {
+            playTogether(
+                ObjectAnimator.ofFloat(button, View.SCALE_X, 1.0f, 1.5f),
+                ObjectAnimator.ofFloat(button, View.SCALE_Y, 1.0f, 1.5f)
+            )
+            duration = 200  // ms para crescer
+            interpolator = DecelerateInterpolator()
+        }
+
+        val scaleDown = AnimatorSet().apply {
+            playTogether(
+                ObjectAnimator.ofFloat(button, View.SCALE_X, 1.5f, 1.0f),
+                ObjectAnimator.ofFloat(button, View.SCALE_Y, 1.5f, 1.0f)
+            )
+            duration = 200  // ms para voltar
+            interpolator = DecelerateInterpolator()
+        }
+
+        // cresce e volta ao original
+        val finalAnimator = AnimatorSet()
+        finalAnimator.play(scaleUp).before(scaleDown)
+
+        // Listener para remover cor no final
+        finalAnimator.addListener(object : android.animation.AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: android.animation.Animator) {
+                // Restaurar fundo original
+                button.background = originalBackground
+            }
+        })
+
+        finalAnimator.start()
     }
 
     class LivroViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

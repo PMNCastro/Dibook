@@ -65,7 +65,6 @@ class HomeActivity : AppCompatActivity() {
             30, TimeUnit.MINUTES // Intervalo de verificação
         ).build()
 
-        // Agendar o trabalho
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "FavoritesNotification",
             ExistingPeriodicWorkPolicy.KEEP,
@@ -73,18 +72,63 @@ class HomeActivity : AppCompatActivity() {
         )
     }
 
+    // DIÁLOGO 1: Confirmar logout (SIM à esquerda, NÃO à direita)
     private fun fazerLogout() {
-        // Limpar apenas o estado de login, mas manter credenciais se o Guardar estiver marcado
+        val builder1 = android.app.AlertDialog.Builder(this)
+        builder1.setTitle("Terminar Sessão")
+        builder1.setMessage("Tem a certeza que deseja sair?")
+
+        builder1.setNegativeButton("Sim") { _, _ ->
+            // Confirmou logout, agora perguntar sobre dados
+            mostrarDialogoLimparDados()
+        }
+
+        builder1.setPositiveButton("Não", null)  // Cancela
+
+        builder1.show()
+    }
+
+    // DIÁLOGO 2: Perguntar se quer limpar dados guardados (SIM à esquerda, NÃO à direita)
+    private fun mostrarDialogoLimparDados() {
+        val builder2 = android.app.AlertDialog.Builder(this)
+        builder2.setTitle("Eliminar Dados Guardados?")
+        builder2.setMessage("Pretende eliminar email e password da sessão?")
+
+        // SIM - Limpar tudo (segurança) - À ESQUERDA
+        builder2.setNegativeButton("Sim - Limpar") { _, _ ->
+            executarLogout(limparCredenciais = true)
+        }
+
+        // NÃO - Manter dados (conveniência) - À DIREITA
+        builder2.setPositiveButton("Não - Manter") { _, _ ->
+            executarLogout(limparCredenciais = false)
+        }
+
+        builder2.show()
+    }
+
+    // Executar logout com ou sem limpeza de credenciais
+    private fun executarLogout(limparCredenciais: Boolean) {
         val editor = sharedPreferences.edit()
+
+        // Sempre limpar dados da sessão
         editor.putBoolean("isLoggedIn", false)
         editor.remove("userId")
         editor.remove("userName")
+
+        // Limpar credenciais apenas se solicitado
+        if (limparCredenciais) {
+            editor.remove("email")
+            editor.remove("password")
+            editor.remove("rememberMe")
+        }
+
         editor.apply()
 
-        // Cancelar notificações ao fazer logout, mas app minimizada nao cancela nots
+        // Cancelar notificações ao fazer logout, mas app minimizada nao cancela nots(mostrar ao professor isto na segunda)
         WorkManager.getInstance(this).cancelUniqueWork("FavoritesNotification")
 
-        // Voltar para MainActivity
+        // Volta MainActivity
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
