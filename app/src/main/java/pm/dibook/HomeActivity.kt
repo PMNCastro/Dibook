@@ -72,14 +72,14 @@ class HomeActivity : AppCompatActivity() {
         )
     }
 
-    // DIÁLOGO 1: Confirmar logout (SIM à esquerda, NÃO à direita)
+    //Confirmar logout
     private fun fazerLogout() {
         val builder1 = android.app.AlertDialog.Builder(this)
         builder1.setTitle("Terminar Sessão")
         builder1.setMessage("Tem a certeza que deseja sair?")
 
         builder1.setNegativeButton("Sim") { _, _ ->
-            // Confirmou logout, agora perguntar sobre dados
+            // Confirmou logout
             mostrarDialogoLimparDados()
         }
 
@@ -88,19 +88,19 @@ class HomeActivity : AppCompatActivity() {
         builder1.show()
     }
 
-    // DIÁLOGO 2: Perguntar se quer limpar dados guardados (SIM à esquerda, NÃO à direita)
+    // Perguntar se quer limpar dados guardados
     private fun mostrarDialogoLimparDados() {
         val builder2 = android.app.AlertDialog.Builder(this)
         builder2.setTitle("Eliminar Dados Guardados?")
         builder2.setMessage("Pretende eliminar email e password da sessão?")
 
-        // SIM - Limpar tudo (segurança) - À ESQUERDA
-        builder2.setNegativeButton("Sim - Limpar") { _, _ ->
+        // sim,Limpa tudo
+        builder2.setNegativeButton("Sim") { _, _ ->
             executarLogout(limparCredenciais = true)
         }
 
-        // NÃO - Manter dados (conveniência) - À DIREITA
-        builder2.setPositiveButton("Não - Manter") { _, _ ->
+        // nao, mantem dados
+        builder2.setPositiveButton("Não") { _, _ ->
             executarLogout(limparCredenciais = false)
         }
 
